@@ -1,0 +1,210 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v3.0.json",
+  "width"  : 500,
+  "height"  : 300,
+  "padding": {
+    "top":    10,
+    "left":   30,
+    "bottom": 30,
+    "right":  10
+  },
+  "autosize": "none",
+
+  "config": {
+    "axis": {
+      "domain": false,
+      "tickSize": 3,
+      "tickColor": "#888",
+      "labelFont": "Monaco, Courier New"
+    }
+  },
+
+  "signals": [
+    {
+      "name": "margin"  ,
+      "value": 20
+    },
+    {
+      "name": "xoffset"           ,
+      "update": "-(height   + padding.bottom  )"
+    },
+    {
+      "name": "yoffset"           ,
+      "update": "-(width   + padding.left  )"
+    },
+    { 
+      "name": "xrange"           , 
+      "update": "[0, width  ]" 
+    },                    
+    { 
+      "name": "yrange"           , 
+      "update": "[height  , 0]" 
+    },                    
+
+    {
+      "name": "xDelta"           , "value": 0,
+      "on": [
+        {"events": "mousedown", "update": "0"},
+        {
+          "events": [
+            {
+              "source": "window", "type": "mousemove", "consume": true,
+              "between": [{"type": "mousedown"}, {"source": "window", "type": "mouseup"}]
+            }
+          ], 
+          "update": "xCoord            - x()"
+        }
+      ]
+    },
+    {
+      "name": "xCoord"           ,
+      "value": 0,
+      "on": [
+        {"events": "mousedown", "update": "x()"},
+        {
+          "events": [
+            {
+              "source": "window", "type": "mousemove", "consume": true,
+              "between": [{"type": "mousedown"}, {"source": "window", "type": "mouseup"}]
+            }
+          ], 
+          "update": "x()"
+        }
+      ]
+    },
+    {
+      "name": "yDelta"           ,
+      "value": 0,
+      "on": [
+        {"events": "mousedown", "update": "0"},
+        {
+          "events": [
+            {
+              "source": "window", "type": "mousemove", "consume": true,
+              "between": [{"type": "mousedown"}, {"source": "window", "type": "mouseup"}]
+            }
+          ], 
+          "update": "y() - yCoord           "
+        }
+      ]
+    },
+    {
+      "name": "yCoord"           ,
+      "value": 0,
+      "on": [
+        {"events": "mousedown", "update": "y()"},
+        {
+          "events": [
+            {
+              "source": "window", "type": "mousemove", "consume": true,
+              "between": [{"type": "mousedown"}, {"source": "window", "type": "mouseup"}]
+            }
+          ], 
+          "update": "y()"
+        }
+      ]
+    },
+
+    {
+      "name": "xMin"           , "value": -0.5,
+      "on": [
+        {
+          "events": {"signal": "xDelta"           },
+          "update": "xMin            + (xMax           -xMin           )*xDelta           /800"                                                                       
+        }
+      ]
+    },
+    {
+      "name": "xMax"           , "value": 0.5,
+      "on": [
+        {
+          "events": {"signal": "xDelta"           },
+          "update": "xMax            + (xMax           -xMin           )*xDelta           /800"                                                                       
+        }
+      ]
+    },
+    {
+      "name": "xDomain"           ,
+      "update": "[xMin           ,xMax           ]"                    
+    },
+
+    {
+      "name": "yMin"           , "value": -0.5,
+      "on": [
+        {
+          "events": {"signal": "yDelta"           },
+          "update": "yMin            + (yMax           -yMin           )*yDelta           /500"                                                                       
+        }
+      ]
+    },
+    {
+      "name": "yMax"           , "value": 0.5,
+      "on": [
+        {
+          "events": {"signal": "yDelta"           },
+          "update": "yMax            + (yMax           -yMin           )*yDelta           /500"                                                                       
+        }
+      ]
+    },
+    {
+      "name": "yDomain"           ,
+      "update": "[yMin           ,yMax           ]"                    
+    },
+
+    {
+      "name": "size"           ,
+      "update": "clamp(20 / span(xDomain           ), 1, 1000)"
+    }
+  ],
+
+  "data": [
+    {
+      "name": "points",
+      "url": "data/normal-2d.json"
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xscale", "zero": false,
+      "domain": {"signal": "xDomain"           },
+      "range": {"signal": "xrange"           }
+    },
+    {
+      "name": "yscale", "zero": false,
+      "domain": {"signal": "yDomain"           },
+      "range": {"signal": "yrange"           }
+    }
+  ],
+
+  "axes": [
+    {
+      "scale": "xscale",
+      "orient": "top",
+      "offset": {"signal": "xoffset"           }
+    },
+    {
+      "scale": "yscale",
+      "orient": "right",
+      "offset": {"signal": "yoffset"           }
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "symbol",
+      "from": {"data": "points"},
+      "encode": {
+        "enter": {
+          "fillOpacity": {"value": 0.6},
+          "fill": {"value": "steelblue"}
+        },
+        "update": {
+          "x": {"scale": "xscale", "field": "u"           },
+          "y": {"scale": "yscale", "field": "v"           },
+          "size": {"signal": "size"           }
+        }
+      }
+    }
+  ]
+}

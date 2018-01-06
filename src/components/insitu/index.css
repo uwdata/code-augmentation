@@ -1,0 +1,25 @@
+.insitu {
+  border: 1px #ddd dotted;
+  cursor: none;
+  margin: 0px 2px;
+}
+
+/***********************************************/
+/******************** Value ********************/
+/***********************************************/
+
+.value-vis {
+  cursor: none;
+  padding: 2.5px 6px;
+  margin: 0px 2px;
+  border-radius: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 7pt;
+  color: white;
+}
+
+/***********************************************/
+/****************** Histogram ******************/
+/***********************************************/

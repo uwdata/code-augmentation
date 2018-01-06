@@ -1,0 +1,16 @@
+{
+    "Baseline": [
+        {"name": "bar-chart-baseline"},
+        {"name": "overview-plus-detail-baseline"},
+        {"name": "scatter-plot-baseline"},
+        {"name": "population-pyramid-baseline"},
+        {"name": "stock-index-chart-baseline"}
+    ],
+    "Visualization": [
+        {"name": "bar-chart-visualization"},
+        {"name": "overview-plus-detail-visualization"},
+        {"name": "scatter-plot-visualization"},
+        {"name": "population-pyramid-visualization"},
+        {"name": "stock-index-chart-visualization"}
+    ]
+}
